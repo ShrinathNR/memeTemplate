@@ -17,6 +17,10 @@ const MemeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    memeImage:{
+        type: String,
+        required: true,
+    },
 
 }, { timestamps: true });
 

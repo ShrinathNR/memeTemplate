@@ -15,7 +15,7 @@ app.use(cors());
 //for storing uploaded images
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'images')
+        cb(null, './../client/src/assests')
     },
     filename: (req, file, cb) => {
         cb(null,Date.now()+'-'+ file.originalname)
@@ -62,4 +62,36 @@ app.get("/read", async (req,res)=>{
         }
         res.send(result);
     });
+});
+
+app.delete("/delete/:id", async(req,res)=>{
+    const id = req.params.id;
+    
+    await MemeModel.findByIdAndRemove(id).exec();
+    
+});
+
+//updating the existing meme template
+app.put('/update', async(req, res) => {
+    const id=req.body.id;
+    const newMemeName = req.body.newMemeName;
+    const newMemeTags = req.body.newMemeTags;
+    const newEmotion = req.body.newEmotion;
+    const newLanguage = req.body.newLanguage;
+    try {
+        await MemeModel.findByIdAndUpdate(id,{memeName:newMemeName,
+            memeTags:newMemeTags,
+            emotion:newEmotion,
+            language:newLanguage,
+         }, (err, docs)=>{
+            if (err){
+                console.log(err)
+            }
+            else{
+                console.log("Updated User : ", docs);
+            }
+        });
+    } catch (err) {
+        console.log(err);
+    }
 });
